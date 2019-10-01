@@ -1,0 +1,6 @@
+.gradle/
+.idea/
+*.txt
+build/
+.directory
+credentials.txt
