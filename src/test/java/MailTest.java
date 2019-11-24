@@ -5,4 +5,9 @@ public class MailTest {
     public void testOsDir() {
         System.out.println(System.getProperty("user.dir"));
     }
+
+    @Test
+    public void receiverParsing() {
+        System.out.println(CredentialParser.getMailReceiver());
+    }
 }

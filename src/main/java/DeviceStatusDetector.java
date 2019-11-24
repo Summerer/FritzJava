@@ -7,6 +7,7 @@ class DeviceStatusDetector {
     private static final String switchAin = CredentialParser.getAin();
     private static final HomeAutomation homeAutomation = HomeAutomation.connect("http://192.168.178.1", CredentialParser.getUsername(), CredentialParser.getPassword());
     private static boolean deviceRunning = false;
+    private static final int activeThreshold = 3; // watt
 
     public static void main(String[] args) {
         Thread runningDetector = new Thread(new DeviceRunningDetector(), "runningDetector");
@@ -35,7 +36,7 @@ class DeviceStatusDetector {
                     while (!deviceRunning) {
                         if (homeAutomation.getSwitchState(switchAin)) {
                             Float powerDraw = homeAutomation.getSwitchPowerWatt(switchAin);
-                            if (powerDraw >= 1) {
+                            if (powerDraw >= activeThreshold) {
                                 counter++;
                                 System.out.println("Current count: " + counter + ". Current load: " + powerDraw + " W");
                             } else {
@@ -84,7 +85,7 @@ class DeviceStatusDetector {
                     while (deviceRunning) {
                         if (homeAutomation.getSwitchState(switchAin)) {
                             Float powerDraw = homeAutomation.getSwitchPowerWatt(switchAin);
-                            if (powerDraw < 1) {
+                            if (powerDraw < activeThreshold) {
                                 counter++;
                                 System.out.println("Current count: " + counter + ". Current load: " + powerDraw + " W");
                             } else {
